@@ -21,7 +21,6 @@ public class RegisterActivity extends AppCompatActivity {
     TextInputEditText etRegPassword;
     TextView tvLoginHere;
     Button btnRegister;
-
     FirebaseAuth mAuth;
 
     @Override
@@ -35,11 +34,6 @@ public class RegisterActivity extends AppCompatActivity {
         btnRegister = findViewById(R.id.btnRegister);
 
         mAuth = FirebaseAuth.getInstance();
-        // Check if user is already logged in
-        if (mAuth.getCurrentUser() != null) {
-            startActivity(new Intent(RegisterActivity.this, MainActivity.class));
-            finish();
-        }
 
         btnRegister.setOnClickListener(view ->{
             createUser();

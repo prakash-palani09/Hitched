@@ -2,24 +2,17 @@ package com.example.get_hitched;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.hbb20.CountryCodePicker;
 
 public class LoginActivity extends AppCompatActivity {
     TextInputEditText etLoginEmail;
@@ -43,16 +36,13 @@ public class LoginActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        if (mAuth.getCurrentUser() != null) {
-            // If user is already logged in, navigate to the main screen
-            startActivity(new Intent(LoginActivity.this, MainActivity.class));
-            finish();  // Close the LoginActivity to prevent going back
-        }
         btnLogin.setOnClickListener(view -> {
             loginUser();
         });
+        tvRegisterHere.setOnClickListener(view ->{
+            startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
+        });
 
-        // Forgot password link click listener
         tvForgotPassword.setOnClickListener(view -> {
             String email = etLoginEmail.getText().toString();
             if (TextUtils.isEmpty(email)) {
