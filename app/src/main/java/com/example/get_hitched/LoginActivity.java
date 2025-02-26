@@ -28,6 +28,14 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        mAuth = FirebaseAuth.getInstance();
+
+        // Check if the user is already logged in
+        if (mAuth.getCurrentUser() != null) {
+            startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+            finish();
+        }
+
         etLoginEmail = findViewById(R.id.etLoginEmail);
         etLoginPassword = findViewById(R.id.etLoginPass);
         tvRegisterHere = findViewById(R.id.tvRegisterHere);
@@ -53,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+
     private void loginUser(){
         String email = etLoginEmail.getText().toString();
         String password = etLoginPassword.getText().toString();
@@ -69,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
                         Toast.makeText(LoginActivity.this, "User logged in successfully", Toast.LENGTH_SHORT).show();
-                        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     }else{
                         Toast.makeText(LoginActivity.this, "Log in Error: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
