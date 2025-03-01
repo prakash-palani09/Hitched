@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -18,7 +21,7 @@ public class LoginActivity extends AppCompatActivity {
     TextInputEditText etLoginEmail;
     TextInputEditText etLoginPassword;
     TextView tvRegisterHere;
-
+    LinearLayout linear;
     Button btnLogin;
     TextView tvForgotPassword;
     FirebaseAuth mAuth;
@@ -27,7 +30,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-
+        LinearLayout linearLayout = findViewById(R.id.linear);
+        Animation bottomUp = AnimationUtils.loadAnimation(this, R.anim.bottom_animation);
+        linearLayout.startAnimation(bottomUp);
         mAuth = FirebaseAuth.getInstance();
 
         // Check if the user is already logged in
