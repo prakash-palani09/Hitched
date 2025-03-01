@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
-    <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFE0">
@@ -14,18 +14,18 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="22dp"
-            android:background="#FFFFE0">
+            android:background="@color/white"
+            android:padding="22dp">
 
             <TextView
                 android:id="@+id/textViewCreator"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
                 android:text="Wedding Planner App"
                 android:textColor="#c2185b"
-                android:textSize="24sp"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="10dp" />
+                android:textSize="24sp" />
 
             <TextView
                 android:id="@+id/welcomeText"
@@ -33,17 +33,17 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/textViewCreator"
                 android:layout_centerHorizontal="true"
-                android:textSize="24sp"
-                android:textColor="#c2185b" />
+                android:textColor="#c2185b"
+                android:textSize="24sp" />
             <!-- App Image -->
             <ImageView
                 android:id="@+id/imageViewLogo"
                 android:layout_width="400dp"
                 android:layout_height="400dp"
-                android:src="@drawable/img123"
                 android:layout_below="@id/welcomeText"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="12dp" />
+                android:layout_marginTop="12dp"
+                android:src="@drawable/img123" />
 
             <EditText
                 android:id="@+id/editTextBrideName"
@@ -52,8 +52,8 @@
                 android:layout_below="@id/imageViewLogo"
                 android:layout_marginTop="16dp"
                 android:hint="Enter Bride's Name"
-                android:padding="12dp"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:padding="12dp" />
 
             <EditText
                 android:id="@+id/editTextGroomName"
@@ -62,8 +62,8 @@
                 android:layout_below="@id/editTextBrideName"
                 android:layout_marginTop="16dp"
                 android:hint="Enter Groom's Name"
-                android:padding="12dp"
-                android:inputType="textPersonName" />
+                android:inputType="textPersonName"
+                android:padding="12dp" />
 
             <Button
                 android:id="@+id/buttonPlanWedding"

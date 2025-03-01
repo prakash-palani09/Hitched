@@ -9,14 +9,13 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="144dp"
-        android:layout_height="121dp"
-        android:layout_marginTop="304dp"
+        android:layout_width="293dp"
+        android:layout_height="258dp"
+        android:layout_marginTop="224dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_launcher_foreground" />
+        app:srcCompat="@drawable/app" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
