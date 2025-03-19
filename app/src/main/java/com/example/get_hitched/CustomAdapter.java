@@ -1,57 +1,70 @@
 package com.example.get_hitched;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
-
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
-public class CustomAdapter extends ArrayAdapter<SpinnerItem> {
+public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.ViewHolder> {
     private Context context;
-    private List<SpinnerItem> items;
+    private List<SpinnerItem> itemList;
+    private OnItemClickListener listener;
+    private int selectedPosition = -1; // Track selected item
 
-    public CustomAdapter(Context context, List<SpinnerItem> items) {
-        super(context, R.layout.list_item, items); // Use the item layout and the list of items
+    public interface OnItemClickListener {
+        void onItemClick(SpinnerItem item);
+    }
+
+    public CustomAdapter(Context context, List<SpinnerItem> itemList, OnItemClickListener listener) {
         this.context = context;
-        this.items = items;
+        this.itemList = itemList;
+        this.listener = listener;
+    }
+
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Use ViewHolder pattern for better performance
-        ViewHolder holder;
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        SpinnerItem item = itemList.get(position);
+        holder.textViewName.setText(item.getName());
+        holder.textViewCost.setText("$" + item.getCost());
 
-        if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
-            holder = new ViewHolder();
-            holder.imageView = convertView.findViewById(R.id.itemImage);
-            holder.textViewName = convertView.findViewById(R.id.itemName);
-            holder.textViewCost = convertView.findViewById(R.id.itemCost);
-            convertView.setTag(holder); // Store the holder with the view
+        // Change background color if selected
+        if (selectedPosition == position) {
+            holder.itemView.setBackgroundColor(Color.LTGRAY); // Highlight selected item
         } else {
-            holder = (ViewHolder) convertView.getTag(); // Reuse the holder
+            holder.itemView.setBackgroundColor(Color.WHITE); // Default color
         }
 
-        // Get the current item
-        SpinnerItem currentItem = getItem(position);
-
-        // Set the image and text
-        if (currentItem != null) {
-            holder.textViewName.setText(currentItem.getName());
-            holder.textViewCost.setText("$" + currentItem.getCost());
-        }
-
-        return convertView;
+        holder.itemView.setOnClickListener(v -> {
+            selectedPosition = position; // Update selected position
+            notifyDataSetChanged(); // Refresh UI
+            listener.onItemClick(item); // Callback for selected item
+        });
     }
 
-    // ViewHolder class to hold the views
-    static class ViewHolder {
-        ImageView imageView;
-        TextView textViewName;
-        TextView textViewCost;
+    @Override
+    public int getItemCount() {
+        return itemList.size();
+    }
+
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        TextView textViewName, textViewCost;
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            textViewName = itemView.findViewById(R.id.itemName);
+            textViewCost = itemView.findViewById(R.id.itemCost);
+        }
     }
 }
