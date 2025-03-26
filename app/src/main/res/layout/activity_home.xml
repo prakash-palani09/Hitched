@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,14 +10,16 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         android:background="@color/white">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:background="@color/white"
             android:padding="22dp">
 
+            <!-- App Title -->
             <TextView
                 android:id="@+id/textViewCreator"
                 android:layout_width="wrap_content"
@@ -27,6 +30,7 @@
                 android:textColor="#c2185b"
                 android:textSize="24sp" />
 
+            <!-- Welcome Text -->
             <TextView
                 android:id="@+id/welcomeText"
                 android:layout_width="wrap_content"
@@ -35,6 +39,7 @@
                 android:layout_centerHorizontal="true"
                 android:textColor="#c2185b"
                 android:textSize="24sp" />
+
             <!-- App Image -->
             <ImageView
                 android:id="@+id/imageViewLogo"
@@ -45,34 +50,51 @@
                 android:layout_marginTop="12dp"
                 android:src="@drawable/img123" />
 
-            <EditText
-                android:id="@+id/editTextBrideName"
-                android:layout_width="match_parent"
+            <!-- Wedding Details -->
+            <TextView
+                android:id="@+id/weddingDetailsText"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/imageViewLogo"
-                android:layout_marginTop="16dp"
-                android:hint="Enter Bride's Name"
-                android:inputType="textPersonName"
-                android:padding="12dp" />
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:text="Fetching wedding details..."
+                android:textColor="#c2185b"
+                android:textSize="18sp"
+                android:gravity="center" />
+            <TextView
+                android:id="@+id/weddingCountdownText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/weddingDetailsText"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="12dp"
+                android:text="Calculating days..."
+                android:textColor="#c2185b"
+                android:textSize="18sp"
+                android:gravity="center"/>
 
-            <EditText
-                android:id="@+id/editTextGroomName"
+            <!-- Add Wedding Details Button -->
+
+            <!-- Plan a Wedding Button -->
+
+            <Button
+                android:id="@+id/buttonAddWeddingDetails"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/editTextBrideName"
-                android:layout_marginTop="16dp"
-                android:hint="Enter Groom's Name"
-                android:inputType="textPersonName"
-                android:padding="12dp" />
+                android:layout_below="@id/weddingDetailsText"
+                android:layout_marginTop="63dp"
+                android:text="Add Wedding Details" />
 
             <Button
                 android:id="@+id/buttonPlanWedding"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/editTextGroomName"
+                android:layout_below="@id/buttonAddWeddingDetails"
                 android:layout_marginTop="16dp"
                 android:text="Plan a Wedding" />
 
+            <!-- Manage Catering -->
             <Button
                 android:id="@+id/buttonCatering"
                 android:layout_width="match_parent"
@@ -81,6 +103,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Manage Catering" />
 
+            <!-- Choose Wedding Theme -->
             <Button
                 android:id="@+id/buttonWeddingTheme"
                 android:layout_width="match_parent"
@@ -89,6 +112,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Choose Wedding Theme" />
 
+            <!-- Send Invitations -->
             <Button
                 android:id="@+id/buttonInvitations"
                 android:layout_width="match_parent"
@@ -97,6 +121,7 @@
                 android:layout_marginTop="16dp"
                 android:text="Send Invitations" />
 
+            <!-- Exit Button -->
             <Button
                 android:id="@+id/buttonExit"
                 android:layout_width="match_parent"

@@ -13,9 +13,8 @@
         android:theme="@style/Theme.Get_Hitched"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:name=".WeddingDetailsDialog"
+            android:exported="false" />
         <activity
             android:name=".PlannerActivity"
             android:exported="false" />
@@ -28,6 +27,15 @@
         <activity
             android:name=".HomeActivity"
             android:exported="false" />
+        <activity
+            android:name=".CateringActivity"
+            android:exported="true" />
+        <activity
+            android:name=".InvitationsActivity"
+            android:exported="true" />
+        <activity
+            android:name=".WeddingThemeActivity"
+            android:exported="true" />
         <activity
             android:name=".SplashScreen"
             android:exported="true">

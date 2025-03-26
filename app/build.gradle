@@ -6,6 +6,9 @@ plugins {
 android {
     namespace 'com.example.get_hitched'
     compileSdk 35
+        buildFeatures {
+            buildConfig true
+        }
 
     defaultConfig {
         applicationId "com.example.get_hitched"
@@ -22,10 +25,16 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+            debug {
+                buildConfigField "String", "API_KEY", "\"${GEMINI_API_KEY}\""
+            }
+            release {
+                buildConfigField "String", "API_KEY", "\"${GEMINI_API_KEY}\""
+            }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 task wrapper(type: Wrapper){
@@ -40,10 +49,11 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.7.0'
     implementation 'com.google.android.material:material:1.12.0'
     implementation 'io.github.chaosleung:pinview:1.4.4'
+    implementation 'com.google.firebase:firebase-firestore:25.1.2'
     implementation(platform("com.google.firebase:firebase-bom:33.8.0"))
     implementation("com.google.firebase:firebase-auth")
-    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
-    implementation 'com.google.firebase:firebase-auth:21.1.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
+    implementation 'com.google.firebase:firebase-auth:23.2.0'
     testImplementation 'junit:junit:4.13.2'
     implementation 'com.hbb20:ccp:2.6.1'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'

@@ -1,3 +1,20 @@
 <resources>
     <string name="app_name">Hitched</string>
+    <string name="enter_bride_s_name">Enter Bride\'s Name</string>
+    <string name="enter_groom_s_name">Enter Groom\'s Name</string>
+    <string name="enter_wedding_date_yyyy_mm_dd">Enter Wedding Date (YYYY-MM-DD)</string>
+    <string name="enter_wedding_city">Enter Wedding City</string>
+    <string-array name="venue_type">
+        <item>Indoor</item>
+        <item>Outdoor</item>
+        <item>Beach</item>
+        <item>Garden</item>
+    </string-array>
+
+    <string-array name="wedding_seasons">
+        <item>Spring</item>
+        <item>Summer</item>
+        <item>Autumn</item>
+        <item>Winter</item>
+    </string-array>
 </resources>
