@@ -25,7 +25,7 @@ public class HomeActivity extends AppCompatActivity {
     private FirebaseFirestore db;
     private FirebaseAuth auth;
     private TextView weddingDetailsText, countdownText;
-    private Button buttonAddWeddingDetails, buttonCatering, buttonWeddingTheme, buttonInvitations, buttonExit;
+    private Button buttonPlanWedding, buttonCatering, buttonWeddingTheme, buttonInvitations, buttonExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
 
         weddingDetailsText = findViewById(R.id.weddingDetailsText);
         countdownText = findViewById(R.id.weddingCountdownText);
-        buttonAddWeddingDetails = findViewById(R.id.buttonPlanWedding);
+        buttonPlanWedding = findViewById(R.id.buttonPlanWedding);
         buttonCatering = findViewById(R.id.buttonCatering);
         buttonWeddingTheme = findViewById(R.id.buttonWeddingTheme);
         buttonInvitations = findViewById(R.id.buttonInvitations);
@@ -45,7 +45,7 @@ public class HomeActivity extends AppCompatActivity {
 
         loadWeddingDetails();
 
-        buttonAddWeddingDetails.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this,PlannerActivity.class)));
+        buttonPlanWedding.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this,PlannerActivity.class)));
         buttonCatering.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, CateringActivity.class)));
         buttonWeddingTheme.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, WeddingThemeActivity.class)));
         buttonInvitations.setOnClickListener(v -> startActivity(new Intent(HomeActivity.this, InvitationsActivity.class)));
