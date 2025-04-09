@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="12dp">
+
+        <ImageView
+            android:id="@+id/iv_venue"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/img123" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_marginStart="12dp">
+
+            <TextView
+                android:id="@+id/tv_venue_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Venue Name"
+                android:textStyle="bold"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tv_venue_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location"
+                android:textColor="#666666"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_venue_capacity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Capacity: 200"
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_venue_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="₹1200/plate"
+                android:textColor="#888888"
+                android:textSize="14sp" />
+
+            <RatingBar
+                android:id="@+id/rating_venue"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="5"
+                android:stepSize="0.5"
+                android:isIndicator="true"
+                android:rating="4.2"
+                android:layout_marginTop="4dp" />
+        </LinearLayout>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

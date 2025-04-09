@@ -7,14 +7,14 @@
     android:background="@android:color/white">
 
     <EditText
-        android:id="@+id/editTextBrideName"
+        android:id="@+id/editTextName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_bride_s_name"
         android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/editTextGroomName"
+        android:id="@+id/editTextPartnerName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/enter_groom_s_name"

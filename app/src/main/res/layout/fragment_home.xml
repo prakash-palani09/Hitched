@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/home_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAF9F6"
+    tools:context=".HomeFragment">
+
+    <!-- Top App Bar inside AppBarLayout -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+            app:title="Hitched"
+            app:titleTextColor="@android:color/white" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Scrollable Content -->
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_marginBottom="56dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- Countdown Section -->
+            <TextView
+                android:id="@+id/weddingCountdownText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="100 Days to Go!"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                android:gravity="center"
+                android:padding="16dp"
+                android:textColor="@color/black" />
+
+            <!-- Wedding Details Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/weddingDetailsText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Bride: -\nGroom: -\n"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Feature Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="16dp">
+
+                <Button
+                    android:id="@+id/buttonPlanWedding"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Planner" />
+
+                <Button
+                    android:id="@+id/buttonCatering"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Catering" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/buttonWeddingTheme"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Themes" />
+
+                <Button
+                    android:id="@+id/buttonInvitations"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp"
+                    android:text="Invites" />
+            </LinearLayout>
+
+            <!-- Vendors Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Top Vendors"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:paddingTop="24dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_vendors"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:scrollbars="vertical" />
+
+            <!-- Bookings Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Your Bookings"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:paddingTop="16dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_bookings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:scrollbars="vertical" />
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <!-- Bottom Navigation -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottom_navigation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:background="@color/white"
+        app:menu="@menu/bottom_nav_menu" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

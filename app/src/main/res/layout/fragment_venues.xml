@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/vendor_fragment_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FAF9F6">
+
+    <!-- AppBarLayout with Toolbar -->
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/primary"
+            android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+            app:title="Vendors"
+            app:titleTextColor="@android:color/white" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <!-- Scrollable Content -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!-- GridView for vendor types -->
+        <GridView
+            android:id="@+id/grid_vendor_types"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:horizontalSpacing="12dp"
+            android:numColumns="2"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="12dp" />
+
+        <!-- RecyclerView for vendors/venues -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_combined_list"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:paddingTop="16dp" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

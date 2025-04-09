@@ -3,21 +3,26 @@ package com.example.get_hitched;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.*;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.HashMap;
 import java.util.Map;
 
 public class WeddingDetailsDialog extends DialogFragment {
 
-    private EditText editTextBride, editTextGroom, editTextDate, editTextCity;
+    private EditText editTextName, editTextPartner, editTextDate, editTextCity;
     private Button buttonSave;
+    private Runnable onSavedCallback;
+
+    public WeddingDetailsDialog(Runnable onSavedCallback) {
+        this.onSavedCallback = onSavedCallback;
+    }
 
     @NonNull
     @Override
@@ -25,8 +30,8 @@ public class WeddingDetailsDialog extends DialogFragment {
         Dialog dialog = new Dialog(requireContext());
         dialog.setContentView(R.layout.activity_wedding_details_dialog);
 
-        editTextBride = dialog.findViewById(R.id.editTextBrideName);
-        editTextGroom = dialog.findViewById(R.id.editTextGroomName);
+        editTextName = dialog.findViewById(R.id.editTextName);
+        editTextPartner = dialog.findViewById(R.id.editTextPartnerName);
         editTextDate = dialog.findViewById(R.id.editTextWeddingDate);
         editTextCity = dialog.findViewById(R.id.editTextCity);
         buttonSave = dialog.findViewById(R.id.buttonSave);
@@ -37,27 +42,30 @@ public class WeddingDetailsDialog extends DialogFragment {
     }
 
     private void saveWeddingDetails() {
-        String brideName = editTextBride.getText().toString().trim();
-        String groomName = editTextGroom.getText().toString().trim();
+        String name = editTextName.getText().toString().trim();
+        String partnerName = editTextPartner.getText().toString().trim();
         String weddingDate = editTextDate.getText().toString().trim();
         String city = editTextCity.getText().toString().trim();
 
-        if (brideName.isEmpty() || groomName.isEmpty() || weddingDate.isEmpty() || city.isEmpty()) {
+        if (name.isEmpty() || partnerName.isEmpty() || weddingDate.isEmpty() || city.isEmpty()) {
             Toast.makeText(getContext(), "Please fill all fields", Toast.LENGTH_SHORT).show();
             return;
         }
 
         FirebaseFirestore db = FirebaseFirestore.getInstance();
+        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
         Map<String, String> weddingData = new HashMap<>();
-        weddingData.put("bride_name", brideName);
-        weddingData.put("groom_name", groomName);
+        weddingData.put("name", name);
+        weddingData.put("partner_name", partnerName);
         weddingData.put("wedding_date", weddingDate);
         weddingData.put("city", city);
 
-        db.collection("weddings").document("user_wedding").set(weddingData)
+        db.collection("weddings").document(userId).set(weddingData)
                 .addOnSuccessListener(aVoid -> {
                     Toast.makeText(getContext(), "Wedding details saved!", Toast.LENGTH_SHORT).show();
-                    dismiss(); // Close the dialog
+                    if (onSavedCallback != null) onSavedCallback.run();
+                    dismiss();
                 })
                 .addOnFailureListener(e ->
                         Toast.makeText(getContext(), "Error saving data", Toast.LENGTH_SHORT).show()
