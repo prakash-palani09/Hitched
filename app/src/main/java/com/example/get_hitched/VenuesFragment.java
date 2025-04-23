@@ -1,5 +1,6 @@
 package com.example.get_hitched;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +85,8 @@ public class VenuesFragment extends Fragment {
             public void onCancelled(@NonNull DatabaseError error) {
                 Toast.makeText(getContext(), "Failed to load vendors", Toast.LENGTH_SHORT).show();
             }
+
+
         });
 
         venueRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -121,7 +124,7 @@ public class VenuesFragment extends Fragment {
             filteredList.addAll(allVenues);
         } else {
             for (Vendor vendor : allVendors) {
-                if (vendor.type != null && vendor.type.equalsIgnoreCase(type)) {
+                if (vendor.getType() != null && vendor.getType().equalsIgnoreCase(type)) {
                     filteredList.add(vendor);
                 }
             }
@@ -129,13 +132,33 @@ public class VenuesFragment extends Fragment {
 
         if (!filteredList.isEmpty()) {
             Object firstItem = filteredList.get(0);
+
             if (firstItem instanceof Vendor) {
-                recyclerView.setAdapter(new VendorAdapter((List<Vendor>) (List<?>) filteredList, getContext()));
+                VendorAdapter adapter = new VendorAdapter((List<Vendor>) (List<?>) filteredList, getContext());
+                adapter.setOnItemClickListener(vendor -> {
+                    Intent intent = new Intent(getContext(), DetailsActivity.class);
+                    intent.putExtra("type", "vendor");
+                    intent.putExtra("vendor", vendor);
+                    startActivity(intent);
+                });
+                recyclerView.setAdapter(adapter);
+
+                recyclerView.setAdapter(adapter);
             } else if (firstItem instanceof Venue) {
-                recyclerView.setAdapter(new VenueAdapter((List<Venue>) (List<?>) filteredList, getContext()));
+                VenueAdapter adapter = new VenueAdapter((List<Venue>) (List<?>) filteredList, getContext());
+                adapter.setOnItemClickListener(venue -> {
+                    Intent intent = new Intent(getContext(), DetailsActivity.class);
+                    intent.putExtra("type", "venue");
+                    intent.putExtra("venue", venue);
+                    startActivity(intent);
+                });
+                recyclerView.setAdapter(adapter);
+
             }
+
         } else {
             recyclerView.setAdapter(null);
         }
     }
+
 }

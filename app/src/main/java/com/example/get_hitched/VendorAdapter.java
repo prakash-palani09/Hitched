@@ -20,6 +20,16 @@ public class VendorAdapter extends RecyclerView.Adapter<VendorAdapter.VendorView
     private List<Vendor> vendorList;
     private Context context;
 
+    public interface OnItemClickListener {
+        void onItemClick(Vendor vendor);
+    }
+
+    private OnItemClickListener listener;
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
     public VendorAdapter(List<Vendor> vendorList, Context context) {
         this.vendorList = vendorList;
         this.context = context;
@@ -35,14 +45,21 @@ public class VendorAdapter extends RecyclerView.Adapter<VendorAdapter.VendorView
     @Override
     public void onBindViewHolder(@NonNull VendorViewHolder holder, int position) {
         Vendor vendor = vendorList.get(position);
-        holder.name.setText(vendor.name);
-        holder.type.setText(vendor.type);
-        holder.city.setText(vendor.city);
-        holder.rating.setRating((float) vendor.rating);
-        Glide.with(context).load(vendor.image_url).into(holder.image);
+        holder.name.setText(vendor.getName());
+        holder.type.setText(vendor.getType());
+        holder.city.setText(vendor.getCity());
+        holder.rating.setRating((float) vendor.getRating());
+        Glide.with(context).load(vendor.getImage_url()).into(holder.image);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(vendorList.get(holder.getAdapterPosition()));
+            }
+        });
     }
 
-    @Override
+
+        @Override
     public int getItemCount() {
         return vendorList.size();
     }

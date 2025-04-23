@@ -1,64 +1,77 @@
 package com.example.get_hitched;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link BookingsFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class BookingsFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private RecyclerView recyclerView;
+    private List<Booking> bookingList;
+    private BookingAdapter bookingAdapter;
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    public BookingsFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment BookingsFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static BookingsFragment newInstance(String param1, String param2) {
-        BookingsFragment fragment = new BookingsFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
+    @Nullable
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_bookings, container, false);
+
+        // Initialize RecyclerView and set LayoutManager
+        recyclerView = view.findViewById(R.id.recyclerViewBookings);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        // Initialize the list of bookings and the adapter
+        bookingList = new ArrayList<>();
+        bookingAdapter = new BookingAdapter(bookingList, getContext());
+        recyclerView.setAdapter(bookingAdapter);
+
+        // Load bookings from Firestore
+        loadBookings();
+
+        return view;
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_bookings, container, false);
+    // Method to load bookings from Firestore
+    private void loadBookings() {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String currentUserId = auth.getCurrentUser().getUid();
+
+        firestore.collection("Bookings")
+                .whereEqualTo("userId", currentUserId)
+                .get()
+                .addOnSuccessListener(querySnapshots -> {
+                    // Clear the list before adding new data
+                    bookingList.clear();
+                    for (DocumentSnapshot doc : querySnapshots) {
+                        // Convert Firestore document to Booking object
+                        Booking booking = doc.toObject(Booking.class);
+                        if (booking != null) {
+                            // Add booking to the list
+                            bookingList.add(booking);
+                        }
+                    }
+                    // Notify the adapter to update the view
+                    bookingAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    // Show error message if data load fails
+                    Toast.makeText(getContext(), "Failed to load bookings", Toast.LENGTH_SHORT).show();
+                });
     }
 }

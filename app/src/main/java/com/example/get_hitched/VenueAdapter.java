@@ -19,6 +19,15 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
 
     private List<Venue> venueList;
     private Context context;
+    private OnItemClickListener listener;
+
+    public interface OnItemClickListener {
+        void onItemClick(Venue venue);
+    }
+
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
 
     public VenueAdapter(List<Venue> venueList, Context context) {
         this.venueList = venueList;
@@ -35,12 +44,18 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
     @Override
     public void onBindViewHolder(@NonNull VenueViewHolder holder, int position) {
         Venue venue = venueList.get(position);
-        holder.name.setText(venue.name);
-        holder.location.setText(venue.location);
-        holder.capacity.setText("Capacity: " + venue.capacity);
-        holder.price.setText("₹" + venue.price_per_plate + "/plate");
-        holder.rating.setRating((float) venue.rating);
-        Glide.with(context).load(venue.image_url).into(holder.image);
+        holder.name.setText(venue.getName());
+        holder.location.setText(venue.getLocation());
+        holder.capacity.setText("Capacity: " + venue.getCapacity());
+        holder.price.setText("₹" + venue.getPrice_per_plate() + "/plate");
+        holder.rating.setRating((float) venue.getRating());
+        Glide.with(context).load(venue.getImage_url()).into(holder.image);
+
+        holder.itemView.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onItemClick(venueList.get(holder.getAdapterPosition()));
+            }
+        });
     }
 
     @Override
@@ -48,7 +63,7 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
         return venueList.size();
     }
 
-    static class VenueViewHolder extends RecyclerView.ViewHolder {
+    class VenueViewHolder extends RecyclerView.ViewHolder {
         TextView name, location, capacity, price;
         ImageView image;
         RatingBar rating;
@@ -61,7 +76,13 @@ public class VenueAdapter extends RecyclerView.Adapter<VenueAdapter.VenueViewHol
             price = itemView.findViewById(R.id.tv_venue_price);
             image = itemView.findViewById(R.id.iv_venue);
             rating = itemView.findViewById(R.id.rating_venue);
+
+            itemView.setOnClickListener(v -> {
+                int position = getBindingAdapterPosition();
+                if (listener != null && position != RecyclerView.NO_POSITION) {
+                    listener.onItemClick(venueList.get(position));
+                }
+            });
         }
     }
 }
-
