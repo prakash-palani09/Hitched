@@ -1,6 +1,12 @@
 package com.example.get_hitched;
 
 import android.app.DatePickerDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -9,6 +15,9 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +37,6 @@ public class BookingActivity extends AppCompatActivity {
 
     private int year, month, dayOfMonth;
 
-    // Firestore instance
     private FirebaseFirestore mFirestore;
     private FirebaseAuth mAuth;
 
@@ -37,27 +45,23 @@ public class BookingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking);
 
-        // Initialize Firestore
         mFirestore = FirebaseFirestore.getInstance();
         mAuth = FirebaseAuth.getInstance();
 
-        // Initialize views
         textName = findViewById(R.id.textName);
         textLocation = findViewById(R.id.textLocation);
         textPrice = findViewById(R.id.textPrice);
-        textSelectedDate = findViewById(R.id.textViewSelectedDate);  // TextView to display selected date
+        textSelectedDate = findViewById(R.id.textViewSelectedDate);
         imageVenue = findViewById(R.id.imageVenue);
         ratingBar = findViewById(R.id.ratingBar);
         buttonConfirmBooking = findViewById(R.id.buttonConfirmBooking);
-        buttonSelectDate = findViewById(R.id.buttonSelectDate);  // Button to trigger DatePicker
+        buttonSelectDate = findViewById(R.id.buttonSelectDate);
 
-        // Get current date
         final Calendar calendar = Calendar.getInstance();
         year = calendar.get(Calendar.YEAR);
         month = calendar.get(Calendar.MONTH);
         dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
 
-        // Check if the Intent contains data for Venue or Vendor
         if (getIntent().hasExtra("venue_data")) {
             venue = (Venue) getIntent().getSerializableExtra("venue_data");
             if (venue != null) {
@@ -78,38 +82,35 @@ public class BookingActivity extends AppCompatActivity {
             }
         }
 
-        // Set the click listener for the "Pick Date" button
         buttonSelectDate.setOnClickListener(v -> {
-            // Open DatePickerDialog
             DatePickerDialog datePickerDialog = new DatePickerDialog(
                     BookingActivity.this,
-                    android.R.style.Theme_Holo_Light_Dialog_MinWidth,
-                    (view, year, month, dayOfMonth) -> {
-                        // Update the selected date in textView
-                        textSelectedDate.setText("Selected Date: " + dayOfMonth + "/" + (month + 1) + "/" + year);
+                    (view, selectedYear, selectedMonth, selectedDay) -> {
+                        // Format and set selected date
+                        String formattedDate = "Selected Date: " + selectedDay + "/" + (selectedMonth + 1) + "/" + selectedYear;
+                        textSelectedDate.setText(formattedDate);
 
-                        // Enable the Confirm button
+                        // Enable the confirm button
                         buttonConfirmBooking.setEnabled(true);
                     },
-                    year, month, dayOfMonth);
+                    year, month, dayOfMonth
+            );
 
-            // Show the date picker dialog
+            // 🔐 Prevent selection of past dates
+            datePickerDialog.getDatePicker().setMinDate(System.currentTimeMillis());
+
             datePickerDialog.show();
         });
 
-        // Handle booking confirmation
+
         buttonConfirmBooking.setOnClickListener(v -> {
-            // Get the selected date
             String selectedDate = textSelectedDate.getText().toString();
 
-            // If no date was selected, show a message or handle the error
             if (selectedDate.equals("No date selected")) {
                 Toast.makeText(BookingActivity.this, "Please select a date", Toast.LENGTH_SHORT).show();
             } else {
-                // Get the current user ID from FirebaseAuth
-                String userId = mAuth.getCurrentUser().getUid();  // Get the logged-in user's UID
+                String userId = mAuth.getCurrentUser().getUid();
 
-                // Save the booking information to Firestore
                 Booking booking = new Booking(
                         venue != null ? venue.getName() : vendor.getName(),
                         venue != null ? venue.getLocation() : vendor.getType(),
@@ -118,15 +119,54 @@ public class BookingActivity extends AppCompatActivity {
                         userId
                 );
 
-                // Save to Firestore
                 mFirestore.collection("Bookings")
                         .add(booking)
                         .addOnSuccessListener(documentReference -> {
+                            String title = venue != null ? venue.getName() : vendor.getName();
+                            showBookingNotification(title);  // 🔔 Show local notification
                             Toast.makeText(BookingActivity.this, "Booking Confirmed", Toast.LENGTH_SHORT).show();
-                            finish();  // Close the activity after booking
+                            finish();
                         })
-                        .addOnFailureListener(e -> Toast.makeText(BookingActivity.this, "Failed to confirm booking", Toast.LENGTH_SHORT).show());
+                        .addOnFailureListener(e ->
+                                Toast.makeText(BookingActivity.this, "Failed to confirm booking", Toast.LENGTH_SHORT).show());
             }
         });
+    }
+
+    private void showBookingNotification(String title) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    "hitched_channel",
+                    "Booking Notifications",
+                    NotificationManager.IMPORTANCE_DEFAULT
+            );
+            channel.setDescription("Notifies user when a booking is confirmed");
+
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            if (manager != null) {
+                manager.createNotificationChannel(channel);
+            }
+        }
+
+        Intent intent = new Intent(this, HomeActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "hitched_channel")
+                .setSmallIcon(R.mipmap.icon)  // Make sure you have this icon
+                .setContentTitle("Booking Confirmed!")
+                .setContentText("Your booking at " + title + " is confirmed.")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+
+            return;
+        }
+        notificationManager.notify(1001, builder.build());
     }
 }

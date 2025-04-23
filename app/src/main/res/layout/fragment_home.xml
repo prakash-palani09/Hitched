@@ -40,6 +40,15 @@
             android:orientation="vertical"
             android:padding="16dp">
 
+            <TextView
+                android:id="@+id/locationText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Location: "
+                android:textSize="16sp"
+                android:layout_marginTop="20dp"/>
+
+
             <!-- Countdown Section -->
             <TextView
                 android:id="@+id/weddingCountdownText"
