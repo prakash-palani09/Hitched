@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.*;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.text.ParseException;
@@ -29,6 +30,9 @@ public class HomeFragment extends Fragment {
     private TextView weddingDetailsText, countdownText;
     private VendorAdapter vendorAdapter;
     private List<Vendor> vendorList;
+    private RecyclerView recyclerViewBookings;
+    private List<Booking> bookingList;
+    private BookingAdapter bookingAdapter;
 
     @Nullable
     @Override
@@ -59,8 +63,17 @@ public class HomeFragment extends Fragment {
         buttonCatering.setOnClickListener(v -> startActivity(new Intent(getActivity(), CateringActivity.class)));
         buttonWeddingTheme.setOnClickListener(v -> startActivity(new Intent(getActivity(), WeddingThemeActivity.class)));
         buttonInvitations.setOnClickListener(v -> startActivity(new Intent(getActivity(), InvitationsActivity.class)));
+        recyclerViewBookings = view.findViewById(R.id.rv_bookings);
+        recyclerViewBookings.setLayoutManager(new LinearLayoutManager(getContext()));
+        bookingList = new ArrayList<>();
+        bookingAdapter = new BookingAdapter(bookingList, requireContext());
+        recyclerViewBookings.setAdapter(bookingAdapter);
+        loadBookings();
 
         return view;
+
+
+
     }
 
     private void loadWeddingDetails() {
@@ -126,5 +139,28 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+
+    private void loadBookings() {
+        FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        String currentUserId = auth.getCurrentUser().getUid();
+
+        firestore.collection("Bookings")
+                .whereEqualTo("userId", currentUserId)
+                .get()
+                .addOnSuccessListener(querySnapshots -> {
+                    bookingList.clear();
+                    for (DocumentSnapshot doc : querySnapshots) {
+                        Booking booking = doc.toObject(Booking.class);
+                        bookingList.add(booking);
+                    }
+                    bookingAdapter.notifyDataSetChanged();
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), "Failed to load bookings", Toast.LENGTH_SHORT).show();
+                });
+    }
+
+
 
 }
